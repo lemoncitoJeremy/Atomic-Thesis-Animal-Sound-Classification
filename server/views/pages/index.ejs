@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atomic Sound Classifier</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style>
+     body{
+      background-color: rgb(39, 39, 39);
+      background-image:url("../assets/spring-magical.jpg") ;
+      margin-top: 10%;
+      margin-left: 25%;
+      margin-right: 20%;
+      display: flex;
+      
+     }
+     .navbar{
+      border-radius: 10px 10px 0px 0px;
+     }
+
+     .main-content{
+     display: flex;
+     flex-direction: column;
+     background-color:#f1f1f1;
+     height: 23rem;
+     width: 30rem;
+     border-radius: 12px 12px 30px 30px;
+     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+     }
+     .record-upload{
+      display: flex;
+      justify-content: space-between;
+      
+     }
+     .audio-player{
+      width: 100%;
+      height:4rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+     
+     }
+     .container-1{
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      height: 15rem;
+      margin: 5px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 10px 10px 10px 10px;
+     }
+     .recording{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+     }
+     .container-2{
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      height: 15rem;
+      margin: 5px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 10px 10px 10px 10px;
+     }
+
+     h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+    }
+
+    span {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        font-size: 18px;
+        color: #333;
+    }
+
+    .button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 6px 20px;
+        gap: 8px;
+        height: 40px;
+        border: none;
+        background: #1b1b1cde;
+        border-radius: 20px;
+        color: #ffff;
+        cursor: pointer;
+    }
+
+    .upload-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 6px 22px;
+        gap: 8px;
+        height: 40px;
+        border: none;
+        background: #1b1b1cde;
+        border-radius: 20px;
+        color: #ffff;
+        cursor: pointer;
+    }
+
+    .label {
+        line-height: 20px;
+        font-size: 17px;
+        color: #ffffff;
+        font-family: sans-serif;
+        letter-spacing: 1px;
+        margin-bottom: 17px;
+    }
+
+    .button:hover {
+        background: #1b1b1c;
+    }
+    .upload-button:hover {
+        background: #1b1b1c;
+    }
+    .button:hover .svg-icon {
+        animation: scale 1s linear infinite;
+    }
+    .upload-button:hover .svg-icon {
+        animation: scale 1s linear infinite;
+    }
+
+    @keyframes scale {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.05) rotate(10deg);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    audio {
+        width: 100%;
+        margin:5px;
+    }
+
+    .hidden {
+        display: none;
+    }
+    p{
+      color: rgb(209, 208, 208);
+    }
+     
+  </style>
+</head>
+<body>
+  <div class="main-content">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">🦇🐸 Sound Classifier</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+                <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.115 2.692l.319.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.115l-.094.319c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291a1.873 1.873 0 0 0-1.115-2.693l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094a1.873 1.873 0 0 0 1.115-2.692l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.291.159a1.873 1.873 0 0 0 2.693-1.115l.094-.319z"/>
+              </svg>  
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+      <div class="record-upload">
+        <div class="container-1">
+          <div class="recording">
+            <div>
+                <button class="button" id="start">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" height="24" fill="none" class="svg-icon">
+                      <g stroke-width="2" stroke-linecap="round" stroke="#ff342b">
+                        <rect y="3" x="9" width="6" rx="3" height="11"></rect><path d="m12 18v3">
+                        </path><path d="m8 21h8"></path><path d="m19 11c0 3.866-3.134 7-7 7-3.86599 0-7-3.134-7-7"></path></g></svg>
+                    <span class="label">Record</span>
+                </button>
+                <button class="button hidden" id="stop">&#x23F9; Stop</button>
+            </div>
+            <span class="title hidden">Record Success!</span>
+          </div>
+        </div>
+        <div class="container-2">
+          <div class="uploading">
+            <div>
+              <button class="upload-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" height="24" fill="none" class="svg-icon">
+                    <g stroke-width="2" stroke-linecap="round" stroke="#ff342b">
+                        <path d="M14 9L7 16l-3-3l7-7l3 3l-7 7l3 3l7-7L14 9z"/>
+                        <path d="M6 16h12v3H6z"/>
+                    </g>
+                </svg>
+                <span class="label">Upload</span>
+            </button>
+            <span class="title hidden">Upload Success!</span>       
+            </div>
+        </div>
+        </div>
+      </div>
+      <div class="audio-player">
+        <audio id="recorder" class="" muted></audio>
+        <audio id="player" class="" controls></audio>
+      </div>
+  </div>
+
+  <div id="txtContainer" style="width: 30%; margin-left: 5px; padding: 10px; background-color: #f1f1f1; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+      <p style="color: black;"><strong>Output :<strong></p>
+      <div id="txtDiv" style="margin-bottom: 20px;"></div>
+      <div id="paginationDiv" style="text-align: center;"></div>
+  </div>
+  <script src="../../script/script.js"></script>
+</body>
+
+</html>
